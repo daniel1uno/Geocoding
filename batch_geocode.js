@@ -1,9 +1,12 @@
 import { bulkGeocode } from "@esri/arcgis-rest-geocoding";
 import { ApiKeyManager } from "@esri/arcgis-rest-request";
 import * as fs from 'fs';
+import dotenv  from "dotenv"
+
+dotenv.config()
 
 //Esri auth
-const apiKey = "AAPK0c26ce955d68433aaf3cc40cb85e76baUo3gV0d9K9XPmdlmgZC20i-ohiXNQiQGTseUQaj9uRygXsmITmxm7S4Cmj4fZ0x1";
+const apiKey = process.env.KEY;
 const authentication = ApiKeyManager.fromKey(apiKey);
 
 
