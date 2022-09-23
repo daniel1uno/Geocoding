@@ -1,7 +1,7 @@
 import { bulkGeocode } from "@esri/arcgis-rest-geocoding";
 import { ApiKeyManager } from "@esri/arcgis-rest-request";
 import * as fs from 'fs';
-import dotenv  from "dotenv"
+import dotenv from "dotenv"
 
 dotenv.config()
 
@@ -14,16 +14,12 @@ const authentication = ApiKeyManager.fromKey(apiKey);
 const data = fs.readFileSync('data/Base_inicial_geocodingv2.csv').toString();
 
 const headers = data.slice(0, data.indexOf("\r\n")).split(',')
-const rows = data.slice(data.indexOf("\n") + 1).split("\r\n");
+const rows = data.slice(data.indexOf("\r\n") + 1).split("\r\n");
 
-const geocode_this = [
-  { OBJECTID: 1, address: "Buckingham Palace" },
-  { OBJECTID: 2, address: "Bernardi's Restaurant London" },
-  { OBJECTID: 3, address: "58 Brewer Street, London, England" },
-]
 
- /*const total_addresses = rows.map(function (row) {
+const total_addresses = rows.map(function (row) {
   const values = row.split(',');
+
   const element = headers.reduce(function (object, header, index) {
     object[header] = values[index];
     return object;
@@ -36,25 +32,16 @@ total_addresses.forEach(function (entry) {
 });
 
 
-
-
-
-//Define amount of addresses to process 
-const addresses = total_addresses.slice(0,1000)*/
+let i = 9
+//Define amount of addresses to process
+// bulk Geocode accepts max batch of 1000 elements
+const addresses = total_addresses.slice(i * 1000, (i * 1000) + 1000)
 
 //Use the geocode function and save results to json file
-console.log(geocode_this)
-bulkGeocode({ geocode_this, authentication: authentication }).then(
-  response => {
-    console.log(response)
-  }
-)
-
-/*bulkGeocode({ addresses_2, authentication: authentication })
+bulkGeocode({ addresses, authentication: authentication })
   .then((response) => {
     var json_response = JSON.stringify(response);
-    print(json_response)
-    fs.writeFile('results/geocode_results.json', json_response, 'utf8', err => {
+    fs.writeFile('results/geocode_results' + String(i) + '.json', json_response, 'utf8', err => {
       if (err) {
         console.error(err);
       } else {
@@ -64,6 +51,4 @@ bulkGeocode({ geocode_this, authentication: authentication }).then(
   })
   .catch((err) => {
     console.log(err);
-  });*/
-
-
+  });
